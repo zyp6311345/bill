@@ -1,0 +1,79 @@
+/* 查询页内容 */
+.pad_del{
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 34px;
+    text-align: center;
+}
+.margin_top{
+    display: none;
+    border: 1px solid #ccc;
+    height: 320px;
+    margin-top:10px;
+    border-radius: 10px;
+    padding: 35px;
+}
+.margin_top .row{
+    margin-top:10px;
+}
+
+.margin_top .find_btn{
+    margin-top:35px;
+}
+
+.clearfix:after,.clearfix:before{ content: "";display: table;}
+.clearfix:after{ clear:both;}
+.center{
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top:20px;
+}
+.title{
+    margin-top:20px;
+    margin-bottom:20px;
+    font-size: 18px;
+    border-bottom: 2px  solid #666;
+    line-height: 40px;
+    text-align: center;
+}
+.title div{
+    color:#666;
+}
+.content_body{
+    margin-top:10px;
+}
+.content_body div[class*='col-']{
+    padding: 0;
+    text-align: center;
+    color:#666;
+}
+.content_bottom{
+    margin-top:30px;
+    border-top:1px dotted #666;
+    text-align: center;
+    line-height: 50px;
+}
+
+
+/* 新增页内容 */
+.add .add_new_object{
+    height: 280px;
+    padding: 35px;
+    margin-bottom: 30px;
+}
+
+.add{
+    margin-top:20px;
+    display: none;
+}
+.add .row{
+    margin-top:10px;
+}
+
+.add .refer{
+    margin-top:30px;
+}
+.add .danger,.add .success{
+    display: none;
+}
