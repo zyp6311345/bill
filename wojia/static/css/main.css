@@ -20,6 +20,10 @@
 .margin_top .find_btn{
     margin-top:35px;
 }
+#danger_date_hint,#danger_money_hint{
+    /*position: absolute;*/
+    display: none;
+}
 
 .clearfix:after,.clearfix:before{ content: "";display: table;}
 .clearfix:after{ clear:both;}

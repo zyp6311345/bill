@@ -35,7 +35,7 @@ $(function(){
     $btn.click(function(){  // 对btn按钮设置点击事件
         $input = $(this).parent().parent().children('input');  // 获取旁边的input按钮
         if($input.prop('disabled')){$input.removeAttr('disabled')}  // 如果是禁用状态，就移除
-        else{$input.attr("disabled",true)}  // 否则就禁用
+        else{$input.attr("disabled",true).val('')}  // 否则就禁用
     });  // btn按钮点击事件
 
     var $head = $('.header');  // 获取主要内容页
@@ -91,9 +91,64 @@ $(function(){
             $('#sum_money').text(data.sum);  // 总和加上
             $('.margin_top').slideUp();  // 收起
         })
+    });
 
 
-    })
+    // 单个查询条件逻辑
+    $('#find_query').click(function () {
+        start_date = $('#start_date').val();  // 开始日期
+        end_date = $('#end_date').val();  // 结束日期
+        find_content = $('#find_content').val();  // 查询内容
+        find_comment = $('#find_comment').val();  // 查询备注
+        start_money = $('#start_money').val();  // 起始金额
+        end_money = $('#end_money').val();  // 结束金额
+
+        a_start_date = new Date(start_date.split('-'));  // 格式化日期格式
+        a_end_date = new Date(end_date.split('-'));  // 同上
+
+        if(a_end_date<a_start_date){  // 判断结束日期是否<起始日期
+            $('#danger_date_hint').slideDown(function () {  // 提示框下拉展开
+                setTimeout(function () {
+                    $('#danger_date_hint').slideUp();
+                }, 5000);  // 5秒后收起
+            });
+            return;}  // 结束if判断
+
+        if(parseInt(end_money)<parseInt(start_money)){  // 同样判断一下金额
+            $('#danger_money_hint').slideDown(function () {
+                setTimeout(function () {
+                    $('#danger_money_hint').slideUp();
+                }, 5000);
+            });
+            return;}  // 同上,结束金额判断
+
+
+        // 组建数据格式
+        find_data = {
+            'start_date':start_date,
+            'end_date': end_date,
+            'find_content': find_content,
+            'find_comment': find_comment,
+            'start_money': start_money,
+            'end_money': end_money,
+            'csrfmiddlewaretoken': csrf
+        };
+
+        // 发送ajax请求
+        $.post('/find_query/', find_data, function (data) {
+            // {'res': 数组, 'sum': 和}
+            $('#find_body').html('');  // 清空内容
+            aList = data.res;  // 获取返回结果
+            for(var i=0;i<aList.length;i++){
+                var $res = $('<div class="row content_body"><div class="col-xs-3">'+aList[i][0]+'</div><div class="col-xs-3">'+aList[i][1]+'</div><div class="col-xs-3">'+aList[i][2]+'</div><div class="col-xs-3">'+aList[i][3]+'</div></div>');
+                console.log($res);
+                $('#find_body').append($res);  // 插入数据
+            }  // 循环读出数据
+            $('#sum_money').text(data.sum);  // 总和加上
+            $('.margin_top').slideUp();  // 收起
+        })
+
+    });  // 单个查询条件的括号
             
 
 });

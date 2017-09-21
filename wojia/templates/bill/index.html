@@ -41,38 +41,46 @@
         <div class="row">
             <div class="input-group">
             <span class="input-group-btn"><button class="btn btn-default" type="button">日期</button></span>
-            <input class="form_datetime form-control" type="text" size="16" placeholder="起始日期">
+            <input class="form_datetime form-control" type="text" size="16" placeholder="起始日期" id="start_date">
             <span class="input-group-addon" id="basic-addon3">-</span>
-            <input class="form_datetime form-control" type="text" size="16" placeholder="结束日期">
+            <input class="form_datetime form-control" type="text" size="16" placeholder="结束日期" id="end_date">
             </div>
+        </div>
+
+        <div class="row danger" id="danger_date_hint">
+            <div class="alert alert-danger" role="alert" style="text-align:center">结束日期不能小于起始日期</div>
         </div>
 
         <div class="row">
             <div class="input-group">
                 <span class="input-group-btn"><button class="btn btn-default" type="button">内容</button></span>
-                <input type="text" class="form-control" placeholder="早餐/网购等" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="早餐/网购等" aria-describedby="basic-addon1" id="find_content">
             </div>
         </div>
 
         <div class="row">
             <div class="input-group">
                 <span class="input-group-btn"><button class="btn btn-default" type="button">备注</button></span>
-                <input type="text" class="form-control" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" aria-describedby="basic-addon1" id="find_comment">
             </div>
         </div>
 
          <div class="row">
             <div class="input-group">
                 <span class="input-group-btn"><button class="btn btn-default" type="button">金额范围</button></span>
-                <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="100">
+                <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="100" id="start_money">
                 <span class="input-group-addon" id="basic-addon3">~</span>
-                <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="1000">
+                <input type="text" class="form-control" aria-describedby="basic-addon1" placeholder="1000" id="end_money">
             </div>
+        </div>
+
+        <div class="row danger" id="danger_money_hint">
+            <div class="alert alert-danger" role="alert" style="text-align:center">结束金额不能小于起始金额</div>
         </div>
 
         <div class="row find_btn">
             <div class="col-xs-6"></div>
-            <div class="col-xs-2"><button type="button" class="btn btn-default">查询</button> </div>
+            <div class="col-xs-2"><button type="button" class="btn btn-default" id="find_query">查询</button> </div>
             <div class="col-xs-2"><button type="button" class="btn btn-default" id="find_all">查询所有</button> </div>
             <div class="col-xs-2"></div>
         </div>
@@ -106,12 +114,12 @@
 {#            <div class="col-xs-3">嘉禾一品粥</div>#}
 {#            <div class="col-xs-3">30.00</div>#}
 {#        </div>#}
-        <div class="row content_body">
-            <div class="col-xs-3">09-17</div>
-            <div class="col-xs-3">晚餐</div>
-            <div class="col-xs-3">嘉禾一品粥</div>
-            <div class="col-xs-3">30.00</div>
-        </div>
+        <!--<div class="row content_body">-->
+            <!--<div class="col-xs-3">09-17</div>-->
+            <!--<div class="col-xs-3">晚餐</div>-->
+            <!--<div class="col-xs-3">嘉禾一品粥</div>-->
+            <!--<div class="col-xs-3">30.00</div>-->
+        <!--</div>-->
 {#        <div class="row content_body">#}
 {#            <div class="col-xs-3">09-17</div>#}
 {#            <div class="col-xs-3">晚餐</div>#}

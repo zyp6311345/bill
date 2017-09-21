@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'wojia',
         'USER': 'root',
         'PASSWORD': 'chuanzhi123',
-        'HOST': 'zyp',
+        'HOST': 'localhost',
         'PORT': 3306,
     }
 }
