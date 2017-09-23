@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^add_new/$', views.add_new, name='add_new'),  # 添加新内容
     url(r'^find_all/$', views.find_all),  # 查询所有内容
     url(r'^find_query', views.find_query),  # 按照条件查询
+    url(r'^$', views.index),  # 主页
 ]
