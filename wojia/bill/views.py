@@ -40,7 +40,7 @@ def add_new(request):
     bdate_list_str = bdate.split('-')  # 做字符串切割,获得的是字符串
     bdate_list = [int(x) for x in bdate_list_str]  # 做整数转化
     bdate = date(bdate_list[0], bdate_list[1], bdate_list[2])  # 转化日期格式
-    bmoney = int(bmoney)  # 转换数字格式
+    bmoney = float(bmoney)  # 转换数字格式
 
     # 2.添加进数据库
     try:
