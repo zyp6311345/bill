@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from datetime import date
 from django.db.models import Sum, Q, F
 from .detorators import is_login
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 
 
 # Create your views here.
@@ -77,44 +77,40 @@ def find_query(request):
     end_moeny = request.POST.get('end_money')  # 获取结束金额
     # 获取的都是字符串,如果空就是空字符串
     body_str = ''
+    # 初始化空字典
+    condition = {}
 
     # 先判断日期是否为空
     if start_date != '':
         start_date_list = start_date.split('-')  # 做字符串切割
         start_date_int = [int(x) for x in start_date_list]  # 转化成数字
         start_date = date(start_date_int[0], start_date_int[1], start_date_int[2])  # 转化日期格式
-        bill_obj = BillInfo.objects.filter(bdate__gte=start_date)  # 对起始日期进行筛选
-    else:
-        bill_obj = BillInfo.objects.all()  # 如果没选定起始日期就查询所有
+        condition["bdate__gte"] = start_date  # 将起始日期存入条件内
 
     if end_date != '':
         end_date_list = end_date.split('-')  # 做字符串切割
         end_date_int = [int(x) for x in end_date_list]  # 转化成数字
         end_date = date(end_date_int[0], end_date_int[1], end_date_int[2])  # 转化日期格式
-        bill_obj = bill_obj.filter(bdate__lte=end_date)  # 对结束时间进行过滤
+        condition["bdate__lte"] = end_date  # 结束日期存入条件内
 
     if content != '':
-        bill_obj = bill_obj.filter(bcontent__contains=content)  # 对内容进行过滤
+        condition["bcontent__contains"] = content  # 查询内容存入条件内
 
     if comment != '':
-        bill_obj = bill_obj.filter(bcomment__contains=comment)  # 对备注进行过滤
+        condition["bcomment__contains"] = comment  # 备注存入条件内
 
     # 判断金额是否为空,非空做类型转化
     if start_money != '':
         start_money = int(start_money)
-        bill_obj = bill_obj.filter(bmoney__gte=start_money)  # 对起始金额过滤
+        condition["bmoney__gte"] = start_money  # 起始金额存入条件内
     if end_moeny != '':
         end_moeny = int(end_moeny)
-        bill_obj = bill_obj.filter(bmoney__lte=end_moeny)  # 对结束金额过滤
+        condition["bmoney__lte"] = end_moeny  # 结束金额存入条件内
+    bill_obj, res_sum = BillInfo.objects.find_query(condition)  # 获取结果集
 
-    try:  # 查询时可能会出现没有结果的情况
-        res_sum = bill_obj.aggregate(Sum('bmoney'))  # 计算总金额
-        res_sum = int(res_sum['bmoney__sum'])  # 做类型转化
-    except TypeError:
-        res_sum = 0
     bills = []  # 定义一个空列表,用于存放所有数据信息
     for bill in bill_obj:  # 遍历出所有对象
-        bill_list = [bill.bdate, bill.bcontent, bill.bcomment, bill.bmoney]  # 组建数据
+        bill_list = [bill.bdate, bill.bcontent, bill.bcomment, bill.bmoney, bill.id]  # 组建数据
         bills.append(bill_list)  # 添加进列表组
 
     return JsonResponse({'res': bills, 'sum': res_sum})
@@ -128,3 +124,23 @@ def delete(request):
     res = BillInfo.objects.delete(uid)  # 获取返回结果
     res = '1' if res else '0'  # 如果返回True则res为1,否则为0
     return JsonResponse({'res': res})
+
+
+@require_POST
+@is_login
+def edit(request):
+    """修改内容"""
+    bdate = request.POST.get('date')  # 获取日期
+    bcontent = request.POST.get('content')  # 获取内容
+    bcomment = request.POST.get('comment')  # 获取备注
+    bmoney = request.POST.get('money')  # 获取金额
+    bill_id = request.POST.get('id')  # 获取id
+    edit_dict = {
+        "bdate": bdate,
+        "bcontent": bcontent,
+        "bcomment": bcomment,
+        "bmoney": bmoney
+    }
+    res = BillInfo.objects.update_bill_info(bill_id, edit_dict)  # 调用更新方法
+    res = "1" if res else "0"
+    return JsonResponse({'res': res})  # 返回结果

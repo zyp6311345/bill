@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^find_all/$', views.find_all),  # 查询所有内容
     url(r'^find_query', views.find_query),  # 按照条件查询
     url(r'^delete/$', views.delete),  # 删除
+    url(r'^edit/$', views.edit),  # 编辑
     url(r'^$', views.index),  # 主页
 ]

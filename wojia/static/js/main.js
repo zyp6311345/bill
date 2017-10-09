@@ -142,7 +142,6 @@ $(function(){
             for(var i=0;i<aList.length;i++){
                 // var $res = $('<div class="row content_body"><div class="col-xs-3">'+aList[i][0]+'</div><div class="col-xs-3">'+aList[i][1]+'</div><div class="col-xs-3">'+aList[i][2]+'</div><div class="col-xs-3">'+aList[i][3]+'</div></div>');
                 var $res = $('<div class="row content_body" data-id="'+aList[i][4]+'"><div class="col-xs-3">'+aList[i][0]+'</div><div class="col-xs-3">'+aList[i][1]+'</div><div class="col-xs-3 func">'+aList[i][2]+'</div><div class="col-xs-3 func">'+aList[i][3]+'</div><div class="col-xs-6 action_box"><div class="delete">删除</div><div class="edit">编辑</div></div></div>');
-                console.log($res);
                 $('#find_body').append($res);  // 插入数据
             }  // 循环读出数据
             $('#sum_money').text(data.sum);  // 总和加上
@@ -154,8 +153,9 @@ $(function(){
 
     // 详细内容的长按事件
     var $edit = undefined;
-    $('#find_body').delegate('.content_body', 'mousedown mouseup', function (event) {
-        if(event.type=='mousedown'){
+    $('#find_body').delegate('.content_body', 'touchstart touchend', function (event) {
+        event.preventDefault();//阻止触摸时浏览器的缩放、滚动条滚动
+        if(event.type=='touchstart'){
             $edit = $(this);  // 获取当前对象
             $timeout = setTimeout(function () {  // 长按2秒执行
                 $edit.children('.func').toggle();  // 后2个显示/隐藏
@@ -164,14 +164,15 @@ $(function(){
                 $edit.siblings().children('.action_box').hide();  // 其他的编辑框隐藏
             }, 2000);  // 设置2秒后触发的定时器
         }
-        if(event.type=='mouseup'){
+        if(event.type=='touchend'){
             clearTimeout($timeout);  // 松开鼠标取消定时器
         }
         return false;  // 阻止冒泡
     });
 
+
     // 删除数据
-    $('.header').delegate('.delete', 'click', function () {
+    $('#find_body').delegate('.delete', 'touchstart', function () {
         $parent = $(this).parents('.content_body');  // 获取父级
         obj_id = $parent.attr('data-id');  // 获取id
         $.get('/delete/?id='+obj_id, function (data) {  // 发起请求
@@ -180,6 +181,68 @@ $(function(){
                     $parent.remove();  // 删除
                 })
             }
+        })
+    });
+
+    // 编辑按钮
+    var $edit_btn = undefined;  // 初始化空的展示框
+    $('#find_body').delegate('.edit', 'touchstart', function () {
+        $edit_btn = $(this).parents('.content_body');  // 保存父级对象(展示框)
+        $('#backdrop').show();  // 显示编辑框
+    });
+
+    $('#backdrop button').click(function(){  // 对btn按钮设置点击事件
+        $input = $(this).parent().parent().children('input');  // 获取旁边的input按钮
+        if($input.prop('disabled')){$input.removeAttr('disabled')}  // 如果是禁用状态，就移除
+        else{$input.attr("disabled",true).val('')}  // 否则就禁用
+    });  // btn按钮点击事件
+
+    // 取消编辑
+    $('#cancel_edit').click(function () {
+        $('#backdrop').hide();  // 编辑框隐藏
+        $('#edit_hint').hide();  // 提示框隐藏
+    });
+
+    // 完成编辑
+    $('#vim').click(function () {
+        bdate = $('#edit_date').val();  // 获取日期
+        content = $('#edit_content').val();  // 获取内容
+        comment = $('#edit_comment').val();  // 获取备注
+        money = $('#edit_money').val();  // 获取金额
+        data_id = $edit_btn.attr('data-id');  // 获取对象id
+
+        if (isNaN(money)){
+            $('#edit_hint').slideDown().text('金额为非数字');  // 显示内容
+            return false;
+        }
+
+        // 发起ajax请求更新数据,最后将提示框隐藏
+        edit_data = {  // 组建数据格式
+            "date": bdate,
+            "content": content,
+            "comment": comment,
+            "money": money,
+            "id": data_id,
+            "csrfmiddlewaretoken": csrf
+        };
+        $.post("/edit/", edit_data, function (data) {
+            // {"res": 1成功, 0失败}
+            if (data.res=="1"){
+                $temp_show = $edit_btn.children('.col-xs-3');  // 展示框
+                if(bdate.trim()!=''){$temp_show.eq(0).text(bdate)}  // 修改日期显示
+                if(content.trim()!=''){$temp_show.eq(1).text(content)}  // 修改内容
+                if(comment.trim()!=''){$temp_show.eq(2).text(comment)}  // 修改备注
+                if(money.trim()!=''){$temp_show.eq(3).text(money)}  // 修改金额
+                $('#backdrop').hide();  // 编辑框隐藏
+                console.log($edit);
+                $edit.children('.func').show();  // 后2个显示复位
+                $edit.children('.action_box').hide();  // 操作框隐藏
+                $('#edit_hint').hide();  // 提示框隐藏
+            }
+            else{
+                $('#edit_hint').slideDown().text("未知错误");  // 显示提示框
+            }
+
         })
 
     });

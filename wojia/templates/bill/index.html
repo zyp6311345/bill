@@ -24,6 +24,84 @@
 </head>
 <body>
 
+<!--编辑框-->
+<div id="backdrop">
+    <div class="container">
+        <div class="backcontainer">
+            <div class="container">
+                <div class="row title">
+                    <div class="col-xs-3">日期</div>
+                    <div class="col-xs-3">内容</div>
+                    <div class="col-xs-3">备注</div>
+                    <div class="col-xs-3">金额</div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row show">
+                    <div class="col-xs-3">09-17</div>
+                    <div class="col-xs-3">早餐</div>
+                    <div class="col-xs-3 func">包子</div>
+                    <div class="col-xs-3 func">2.00</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-10">
+                <div class="input-group">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button">日期</button></span>
+                    <input class="form_datetime form-control" type="text" size="16" id="edit_date">
+                </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-10">
+                <div class="input-group">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button">内容</button></span>
+                    <input type="text" class="form-control" aria-describedby="basic-addon1" id="edit_content">
+                </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-10">
+                <div class="input-group">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button">备注</button></span>
+                    <input type="text" class="form-control" aria-describedby="basic-addon1" id="edit_comment">
+                </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-10">
+                <div class="input-group">
+                    <span class="input-group-btn"><button class="btn btn-default" type="button">金额</button></span>
+                    <input type="text" class="form-control" aria-describedby="basic-addon1" id="edit_money">
+                </div>
+                </div>
+            </div>
+
+            <div class="row edit">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-4"><button type="button" class="btn btn-primary" id="vim">完成</button></div>
+                <div class="col-xs-2"></div>
+                <div class="col-xs-4"><button type="button" class="btn btn-danger" id="cancel_edit">取消</button></div>
+                <div class="col-xs-1"></div>
+            </div>
+
+            <div class="container" id="error_hint">
+                <div class="row danger">
+                    <div class="alert alert-danger" role="alert" style="text-align:center" id="edit_hint">未知错误</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
     <ul class="nav nav-tabs wid" role="tablist">
         <li role="presentation" class="active"><a href="#" aria-controls="home" role="tab" data-toggle="tab">查询</a></li>
         <li role="presentation"><a href="#" aria-controls="profile" role="tab" data-toggle="tab">新增</a></li>
@@ -86,7 +164,7 @@
         </div>
 
     </div> <!-- container margin_top clearfix -->
-    <div class="container">
+    <div class="container hahahaha">
         <div class="row title">
             <div class="col-xs-3">日期</div>
             <div class="col-xs-3">内容</div>
@@ -188,7 +266,10 @@
         <div class="alert alert-danger" role="alert" style="text-align:center">未知错误</div>
     </div>
 
+
+
 </div>
+
 {% csrf_token %}
 </body>
 </html>
