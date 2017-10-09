@@ -153,9 +153,12 @@ $(function(){
 
     // 详细内容的长按事件
     var $edit = undefined;
-    $('#find_body').delegate('.content_body', 'touchstart touchend', function (event) {
+    $('#find_body').delegate('.content_body', 'touchstart touchend touchmove', function (event) {
         event.preventDefault();//阻止触摸时浏览器的缩放、滚动条滚动
+        con_srcoll = $(document).scrollTop();  // 获取当前页面高度
+        touch = event.originalEvent.targetTouches[0];
         if(event.type=='touchstart'){
+            y = touch.pageY;  // 记录按下时的高度
             $edit = $(this);  // 获取当前对象
             $timeout = setTimeout(function () {  // 长按2秒执行
                 $edit.children('.func').toggle();  // 后2个显示/隐藏
@@ -166,6 +169,18 @@ $(function(){
         }
         if(event.type=='touchend'){
             clearTimeout($timeout);  // 松开鼠标取消定时器
+        }
+        if(event.type=='touchmove'){  // 滚动事件
+            clearTimeout($timeout);  // 取消定时器
+            temp_y = touch.pageY;  // 记录当前高度
+            scroll_num = temp_y - y;  // 记录2次的差值
+            if(scroll_num>0){
+                scroll_num = $(document).scrollTop() - scroll_num;  // 正值表示下滑,页面高度要减小
+            }
+            else{  // 负值的情况
+                scroll_num = $(document).scrollTop() - scroll_num;  // 页面高度+差值
+            }
+            $('body,html').stop().animate({"scrollTop": scroll_num},0);  // 高度赋值
         }
         return false;  // 阻止冒泡
     });
